@@ -44,14 +44,20 @@
                     <h2>Manage Member</h2>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
-                            <th>Nama</th>
+                            <th>Nama Lengkap</th>
+                            <th>Username</th>
                             <th>Email</th>
                             <th>No HP</th>
+                            <th>Alamat</th>
+                            <th>Kecamatan</th>
                         </tr>
                         <tr>
                             <td>John Doe</td>
+                            <td>JojohnDodoe</td>
                             <td>johndoe@example.com</td>
                             <td>081234567890</td>
+                            <td>Jl. Bintang Kejora</td>
+                            <th>Binong</th>
                         </tr>
                         <!-- Add More Rows Dynamically -->
                     </table>
@@ -60,8 +66,8 @@
             } else if (type === 'transaction') {
                 mainContent.innerHTML = `
                     <h2>Transaction</h2>
-                    <!-- Tabel Transaksi Member -->
-                    <h3>Transaksi Member</h3>
+
+                    <h3>- Transaksi Member</h3>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Tanggal</th>
@@ -76,10 +82,6 @@
                             <td>Plastik Kresek</td>
                             <td>5</td>
                             <td>Rp. 40,000</td>
-                        </tr>
-                        <!-- Add More Rows Dynamically -->
-                    </table>
-                    <button onclick="showSuccessPopup('Transaksi Member berhasil direkam')">Post BS</button>
 
                     <!-- Tabel Transaksi Bank-Sampah Pusat -->
                     <h3>Transaksi Bank-Sampah Pusat</h3>
@@ -247,7 +249,6 @@
                 <button onclick="closePopup()">OK</button>
             `;
         }
-
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
