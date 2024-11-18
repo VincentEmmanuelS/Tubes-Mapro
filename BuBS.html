@@ -66,6 +66,7 @@
             } else if (type === 'transaction') {
                 mainContent.innerHTML = `
                     <h2>Transaction</h2>
+
                     <h3>- Transaksi Member</h3>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
@@ -81,10 +82,9 @@
                             <td>Plastik Kresek</td>
                             <td>5</td>
                             <td>Rp. 40,000</td>
-                        </tr>
-                        <!-- Add More Rows Dynamically -->
-                    </table>
-                    <h3>- Transaksi Bank-Sampah Pusat</h3>
+
+                    <!-- Tabel Transaksi Bank-Sampah Pusat -->
+                    <h3>Transaksi Bank-Sampah Pusat</h3>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Tanggal</th>
@@ -102,7 +102,7 @@
                         </tr>
                         <!-- Add More Rows Dynamically -->
                     </table>
-                    <p>Total: <input type="text" value="Rp. 0" disabled></p>
+                    <button onclick="showSuccessPopup('Transaksi BS Pusat berhasil direkam')">Post BS Pusat</button>
                 `;
             } else if (type === 'manage-sampah') {
                 mainContent.innerHTML = `
@@ -235,6 +235,19 @@
                     alert('Please fill out all fields for "Add Sampah".');
                 }
             }
+        }
+
+        function showSuccessPopup(message) {
+            const popup = document.getElementById('popup');
+            const popupForm = document.getElementById('popup-form');
+            const popupTitle = document.getElementById('popup-title');
+            
+            popup.style.display = 'flex';
+            popupTitle.innerText = 'Sukses';
+            popupForm.innerHTML = `
+                <p>${message}</p>
+                <button onclick="closePopup()">OK</button>
+            `;
         }
 
         function closePopup() {
