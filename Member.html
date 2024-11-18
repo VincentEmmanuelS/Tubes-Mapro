@@ -27,9 +27,44 @@
         function showContent(type) {
             const mainContent = document.getElementById('main-content');
             if (type === 'harga') {
-                mainContent.innerHTML = '<h2>Daftar Harga</h2><p>... isi harga ...</p>';
+                mainContent.innerHTML = `
+                    <h2>Daftar Harga</h2>
+                    <table border="1" style="width: 100%; margin-bottom: 10px;">
+                        <tr>
+                            <th>Nama Sampah</th>
+                            <th>Harga / Satuan Unit Kuantitas</th>
+                            <th>Jenis Sampah</th>
+                            <th>Satuan Unit Kuantitas</th>
+                        </tr>
+                        <tr>
+                            <td>Plastik Kresek</td>
+                            <td>Rp. 8,000</td>
+                            <td>Plastik</td>
+                            <td>kg</td>
+                        </tr>
+                        <!-- Add More Rows Dynamically -->
+                    </table>
+                `;
             } else if (type === 'history') {
-                mainContent.innerHTML = '<h2>History Transaksi</h2><p>... isi history ...</p>';
+                mainContent.innerHTML = `
+                    <!-- Tabel Transaksi Member -->
+                    <h2>History Transaksi</h2>
+                    <table border="1" style="width: 100%; margin-bottom: 10px;">
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Nama Sampah</th>
+                            <th>Jumlah / Satuan Unit Kuantitas</th>
+                            <th>Total Harga</th>
+                        </tr>
+                        <tr>
+                            <td>22-07-2023</td>
+                            <td>Plastik Kresek</td>
+                            <td>5</td>
+                            <td>Rp. 40,000</td>
+                        </tr>
+                        <!-- Add More Rows Dynamically -->
+                    </table>
+                `;
             }
         }
     </script>
