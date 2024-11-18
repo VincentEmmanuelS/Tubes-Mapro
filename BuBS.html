@@ -60,22 +60,47 @@
             } else if (type === 'transaction') {
                 mainContent.innerHTML = `
                     <h2>Transaction</h2>
+                    <!-- Tabel Transaksi Member -->
+                    <h3>Transaksi Member</h3>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
+                            <th>Tanggal</th>
+                            <th>Username Member</th>
                             <th>Nama Sampah</th>
-                            <th>Harga / kg</th>
-                            <th>Jenis Sampah</th>
-                            <th>Berat (kg)</th>
+                            <th>Jumlah / Satuan Unit Kuantitas</th>
+                            <th>Total Harga</th>
                         </tr>
                         <tr>
+                            <td>22-07-2023</td>
+                            <td>John Doe</td>
                             <td>Plastik Kresek</td>
-                            <td>Rp. 8,000</td>
-                            <td>Plastik</td>
-                            <td><input type="number" value="0"></td>
+                            <td>5</td>
+                            <td>Rp. 40,000</td>
                         </tr>
                         <!-- Add More Rows Dynamically -->
                     </table>
-                    <p>Total: <input type="text" value="Rp. 0" disabled></p>
+                    <button onclick="showSuccessPopup('Transaksi Member berhasil direkam')">Post BS</button>
+
+                    <!-- Tabel Transaksi Bank-Sampah Pusat -->
+                    <h3>Transaksi Bank-Sampah Pusat</h3>
+                    <table border="1" style="width: 100%; margin-bottom: 10px;">
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Bank-Sampah Pusat</th>
+                            <th>Nama Sampah</th>
+                            <th>Jumlah / Satuan Unit Kuantitas</th>
+                            <th>Total Harga</th>
+                        </tr>
+                        <tr>
+                            <td>01-08-2023</td>
+                            <td>Burangrang</td>
+                            <td>Plastik Kresek</td>
+                            <td>5</td>
+                            <td>Rp. 40,000</td>
+                        </tr>
+                        <!-- Add More Rows Dynamically -->
+                    </table>
+                    <button onclick="showSuccessPopup('Transaksi BS Pusat berhasil direkam')">Post BS Pusat</button>
                 `;
             } else if (type === 'manage-sampah') {
                 mainContent.innerHTML = `
@@ -83,14 +108,16 @@
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Nama Sampah</th>
-                            <th>Harga / kg</th>
+                            <th>Harga / Satuan Unit Kuantitas</th>
                             <th>Jenis Sampah</th>
+                            <th>Satuan Unit Kuantitas</th>
                             <th>Edit</th>
                         </tr>
                         <tr>
                             <td>Plastik Kresek</td>
                             <td>Rp. 8,000</td>
                             <td>Plastik</td>
+                            <td>kg</td>
                             <td><button onclick="showPopup('edit-sampah', { nama: 'Plastik Kresek', harga: 'Rp. 8,000' })">Edit</button></td>
                         </tr>
                         <!-- Add More Rows Dynamically -->
@@ -143,6 +170,20 @@
                 `;
             }
         }
+
+        function showSuccessPopup(message) {
+            const popup = document.getElementById('popup');
+            const popupForm = document.getElementById('popup-form');
+            const popupTitle = document.getElementById('popup-title');
+            
+            popup.style.display = 'flex';
+            popupTitle.innerText = 'Sukses';
+            popupForm.innerHTML = `
+                <p>${message}</p>
+                <button onclick="closePopup()">OK</button>
+            `;
+        }
+
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
