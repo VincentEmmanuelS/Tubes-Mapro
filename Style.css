@@ -165,11 +165,40 @@ button:hover {
     align-items: center;
 }
 
+/* Popup Styling */
 .popup {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 300px;
+    width: 300px; /* Atur lebar tetap untuk popup */
+    max-width: 90%; /* Responsif jika layar kecil */
+    margin: auto; /* Pusatkan popup */
+}
+
+/* Input Fields */
+.popup input, .popup select {
+    width: calc(100% - 20px); /* Lebar penuh dengan jarak dari sisi */
+    max-width: 300px; /* Batas maksimum lebar input */
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Pastikan padding tidak menambah ukuran total */
+}
+
+/* Add Button */
+.popup button {
+    width: auto; /* Jangan paksa tombol melebar */
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.popup button:hover {
+    background-color: #45a049;
 }
