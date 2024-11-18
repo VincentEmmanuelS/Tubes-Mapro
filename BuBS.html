@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sampah - Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bank Sampah</h1>
+            <button onclick="location.href='Login.html'">Log Out</button>
+        </header>
+        <sidebar>
+            <ul>
+                <li><button onclick="showContent('manage-member')">Manage Member</button></li>
+                <li><button onclick="showContent('transaction')">Transaction</button></li>
+                <li><button onclick="showContent('manage-sampah')">Manage Sampah</button></li>
+            </ul>
+        </sidebar>
+        <main id="main-content">
+            <h2>Selamat Datang di Halaman Admin</h2>
+        </main>
+        <footer>Bank Sampah</footer>
+    </div>
+    <div id="popup" class="overlay" style="display: none;">
+        <div class="popup">
+            <h2 id="popup-title"></h2>
+            <form id="popup-form">
+                <!-- Dynamic Fields Will Be Inserted Here -->
+            </form>
+        </div>
+    </div>
+    <script>
+        // Main Content Dynamic Switcher
+        function showContent(type) {
+            const mainContent = document.getElementById('main-content');
+            const popupForm = document.getElementById('popup-form');
+            const popupTitle = document.getElementById('popup-title');
+
+            if (type === 'manage-member') {
+                mainContent.innerHTML = `
+                    <h2>Manage Member</h2>
+                    <table border="1" style="width: 100%; margin-bottom: 10px;">
+                        <tr>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>No HP</th>
+                        </tr>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>johndoe@example.com</td>
+                            <td>081234567890</td>
+                        </tr>
+                        <!-- Add More Rows Dynamically -->
+                    </table>
+                    <button onclick="showPopup('add-member')">Add Member</button>
+                `;
+            } else if (type === 'transaction') {
+                mainContent.innerHTML = `
+                    <h2>Transaction</h2>
+                    <table border="1" style="width: 100%; margin-bottom: 10px;">
+                        <tr>
+                            <th>Nama Sampah</th>
+                            <th>Harga / kg</th>
+                            <th>Jenis Sampah</th>
+                            <th>Berat (kg)</th>
+                        </tr>
+                        <tr>
+                            <td>Plastik Kresek</td>
+                            <td>Rp. 8,000</td>
+                            <td>Plastik</td>
+                            <td><input type="number" value="0"></td>
+                        </tr>
+                        <!-- Add More Rows Dynamically -->
+                    </table>
+                    <p>Total: <input type="text" value="Rp. 0" disabled></p>
+                `;
+            } else if (type === 'manage-sampah') {
+                mainContent.innerHTML = `
+                    <h2>Manage Sampah</h2>
+                    <table border="1" style="width: 100%; margin-bottom: 10px;">
+                        <tr>
+                            <th>Nama Sampah</th>
+                            <th>Harga / kg</th>
+                            <th>Jenis Sampah</th>
+                            <th>Edit</th>
+                        </tr>
+                        <tr>
+                            <td>Plastik Kresek</td>
+                            <td>Rp. 8,000</td>
+                            <td>Plastik</td>
+                            <td><button onclick="showPopup('edit-sampah', { nama: 'Plastik Kresek', harga: 'Rp. 8,000' })">Edit</button></td>
+                        </tr>
+                        <!-- Add More Rows Dynamically -->
+                    </table>
+                    <button onclick="showPopup('add-sampah')">Add Sampah</button>
+                `;
+            }
+        }
+
+        // Popup Handler
+        function showPopup(type, data = {}) {
+            const popup = document.getElementById('popup');
+            const popupForm = document.getElementById('popup-form');
+            const popupTitle = document.getElementById('popup-title');
+            popup.style.display = 'flex';
+
+            if (type === 'add-member') {
+                popupTitle.innerText = 'Add Member';
+                popupForm.innerHTML = `
+                    <input type="text" placeholder="Nama Lengkap" required><br>
+                    <input type="email" placeholder="Email" required><br>
+                    <input type="text" placeholder="No HP" required><br>
+                    <select required>
+                        <option value="" disabled selected>Pilih Kelurahan</option>
+                        <option>Kelurahan 1</option>
+                        <option>Kelurahan 2</option>
+                    </select><br>
+                    <select required>
+                        <option value="" disabled selected>Pilih Kecamatan</option>
+                        <option>Kecamatan 1</option>
+                        <option>Kecamatan 2</option>
+                    </select><br>
+                    <button onclick="closePopup()">Add</button>
+                `;
+            } else if (type === 'add-sampah') {
+                popupTitle.innerText = 'Add Sampah';
+                popupForm.innerHTML = `
+                    <input type="text" placeholder="Nama Sampah" required><br>
+                    <input type="text" placeholder="Jenis Sampah" required><br>
+                    <input type="number" placeholder="Harga / kg" required><br>
+                    <button onclick="closePopup()">Add</button>
+                `;
+            } else if (type === 'edit-sampah') {
+                popupTitle.innerText = `Edit Sampah (${data.nama})`;
+                popupForm.innerHTML = `
+                    <p>Harga Lama: ${data.harga}</p>
+                    <input type="number" placeholder="Harga Baru" required><br>
+                    <button onclick="closePopup()">Save</button>
+                    <button style="background-color: #f44336;" onclick="closePopup()">Delete</button>
+                `;
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

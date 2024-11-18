@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sampah - Member</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bank Sampah</h1>
+            <button onclick="location.href='Login.html'">Log Out</button>
+        </header>
+        <sidebar>
+            <ul>
+                <li><button onclick="showContent('harga')">Lihat Harga Sekarang</button></li>
+                <li><button onclick="showContent('history')">Lihat History</button></li>
+            </ul>
+        </sidebar>
+        <main id="main-content">
+            <h2>Selamat Datang di Halaman Member</h2>
+        </main>
+        <footer>Bank Sampah</footer>
+    </div>
+    <script>
+        function showContent(type) {
+            const mainContent = document.getElementById('main-content');
+            if (type === 'harga') {
+                mainContent.innerHTML = '<h2>Daftar Harga</h2><p>... isi harga ...</p>';
+            } else if (type === 'history') {
+                mainContent.innerHTML = '<h2>History Transaksi</h2><p>... isi history ...</p>';
+            }
+        }
+    </script>
+</body>
+</html>
