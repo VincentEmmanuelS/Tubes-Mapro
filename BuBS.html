@@ -44,14 +44,20 @@
                     <h2>Manage Member</h2>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
-                            <th>Nama</th>
+                            <th>Nama Lengkap</th>
+                            <th>Username</th>
                             <th>Email</th>
                             <th>No HP</th>
+                            <th>Alamat</th>
+                            <th>Kelurahan</th>
                         </tr>
                         <tr>
                             <td>John Doe</td>
+                            <td>JojohnDodoe</td>
                             <td>johndoe@example.com</td>
                             <td>081234567890</td>
+                            <td>Jl. Bintang Kejora</td>
+                            <td>Ciroyom</td>
                         </tr>
                         <!-- Add More Rows Dynamically -->
                     </table>
@@ -60,8 +66,8 @@
             } else if (type === 'transaction') {
                 mainContent.innerHTML = `
                     <h2>Transaction</h2>
-                    <!-- Tabel Transaksi Member -->
-                    <h3>Transaksi Member</h3>
+
+                    <h3>- Transaksi Member</h3>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Tanggal</th>
@@ -77,12 +83,11 @@
                             <td>5</td>
                             <td>Rp. 40,000</td>
                         </tr>
-                        <!-- Add More Rows Dynamically -->
                     </table>
                     <button onclick="showSuccessPopup('Transaksi Member berhasil direkam')">Post BS</button>
 
                     <!-- Tabel Transaksi Bank-Sampah Pusat -->
-                    <h3>Transaksi Bank-Sampah Pusat</h3>
+                    <h3>- Transaksi Bank-Sampah Pusat</h3>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Tanggal</th>
@@ -127,7 +132,39 @@
             }
         }
 
-        // Popup Handler
+        // Dynamic Row Addition
+        function addRowToTable(type, data) {
+            const mainContent = document.getElementById('main-content');
+
+            if (type === 'manage-member') {
+                // Find the table in "Manage Member" section
+                const table = mainContent.querySelector('table');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${data.namaLengkap}</td>
+                    <td>${data.username}</td>
+                    <td>${data.email}</td>
+                    <td>${data.noHp}</td>
+                    <td>${data.alamat}</td>
+                    <td>${data.kecamatan}</td>
+                `;
+                table.appendChild(newRow);
+            } else if (type === 'manage-sampah') {
+                // Find the table in "Manage Sampah" section
+                const table = mainContent.querySelector('table');
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                    <td>${data.namaSampah}</td>
+                    <td>${data.harga}</td>
+                    <td>${data.jenis}</td>
+                    <td>${data.satuan}</td>
+                    <td><button onclick="showPopup('edit-sampah', { nama: '${data.namaSampah}', harga: '${data.harga}' })">Edit</button></td>
+                `;
+                table.appendChild(newRow);
+            }
+        }
+
+        // Popup Handler Update
         function showPopup(type, data = {}) {
             const popup = document.getElementById('popup');
             const popupForm = document.getElementById('popup-form');
@@ -137,28 +174,30 @@
             if (type === 'add-member') {
                 popupTitle.innerText = 'Add Member';
                 popupForm.innerHTML = `
-                    <input type="text" placeholder="Nama Lengkap" required><br>
-                    <input type="email" placeholder="Email" required><br>
-                    <input type="text" placeholder="No HP" required><br>
-                    <select required>
+                    <input type="text" id="popupNamaLengkap" placeholder="Nama Lengkap" required><br>
+                    <input type="text" id="popupUsername" placeholder="Username" required><br>
+                    <input type="email" id="popupEmail" placeholder="Email" required><br>
+                    <input type="text" id="popupNoHp" placeholder="No HP" required><br>
+                    <input type="text" id="popupAlamat" placeholder="Alamat" required><br>
+                    <select id="popupKecamatan" required>
                         <option value="" disabled selected>Pilih Kelurahan</option>
-                        <option>Kelurahan 1</option>
-                        <option>Kelurahan 2</option>
+                        <option>Ciroyom</option>
+                        <option>Campaka</option>
                     </select><br>
-                    <select required>
-                        <option value="" disabled selected>Pilih Kecamatan</option>
-                        <option>Kecamatan 1</option>
-                        <option>Kecamatan 2</option>
-                    </select><br>
-                    <button onclick="closePopup()">Add</button>
+                    <button onclick="submitPopup('manage-member')">Add</button>
                 `;
             } else if (type === 'add-sampah') {
                 popupTitle.innerText = 'Add Sampah';
                 popupForm.innerHTML = `
-                    <input type="text" placeholder="Nama Sampah" required><br>
-                    <input type="text" placeholder="Jenis Sampah" required><br>
-                    <input type="number" placeholder="Harga / kg" required><br>
-                    <button onclick="closePopup()">Add</button>
+                    <input type="text" id="popupNamaSampah" placeholder="Nama Sampah" required><br>
+                    <input type="text" id="popupHarga" placeholder="Harga / Satuan Unit Kuantitas" required><br>
+                    <input type="text" id="popupSatuan" placeholder="Satuan Unit Kuantitas" required><br>
+                    <select id="popupJenis" required>
+                        <option value="" disabled selected>Pilih Jenis Sampah</option>
+                        <option>Plastik</option>
+                        <option>Kertas</option>
+                    </select><br>
+                    <button onclick="submitPopup('manage-sampah')">Add</button>
                 `;
             } else if (type === 'edit-sampah') {
                 popupTitle.innerText = `Edit Sampah (${data.nama})`;
@@ -168,6 +207,36 @@
                     <button onclick="closePopup()">Save</button>
                     <button style="background-color: #f44336;" onclick="closePopup()">Delete</button>
                 `;
+            }
+        }
+
+        function submitPopup(type) {
+            if (type === 'manage-member') {
+                const namaLengkap = document.getElementById('popupNamaLengkap').value.trim();
+                const username = document.getElementById('popupUsername').value.trim();
+                const email = document.getElementById('popupEmail').value.trim();
+                const noHp = document.getElementById('popupNoHp').value.trim();
+                const alamat = document.getElementById('popupAlamat').value.trim();
+                const kecamatan = document.getElementById('popupKecamatan').value;
+        
+                if (namaLengkap && username && email && noHp && alamat && kecamatan) {
+                    addRowToTable('manage-member', { namaLengkap, username, email, noHp, alamat, kecamatan });
+                    closePopup();
+                } else {
+                    alert('Please fill out all fields for "Add Member".');
+                }
+            } else if (type === 'manage-sampah') {
+                const namaSampah = document.getElementById('popupNamaSampah').value.trim();
+                const harga = document.getElementById('popupHarga').value.trim();
+                const satuan = document.getElementById('popupSatuan').value.trim();
+                const jenis = document.getElementById('popupJenis').value;
+        
+                if (namaSampah && harga && satuan && jenis) {
+                    addRowToTable('manage-sampah', { namaSampah, harga, satuan, jenis });
+                    closePopup();
+                } else {
+                    alert('Please fill out all fields for "Add Sampah".');
+                }
             }
         }
 
@@ -183,7 +252,6 @@
                 <button onclick="closePopup()">OK</button>
             `;
         }
-
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
