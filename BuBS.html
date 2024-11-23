@@ -15,7 +15,13 @@
         <sidebar>
             <ul>
                 <li><button onclick="showContent('manage-member')">Manage Member</button></li>
-                <li><button onclick="showContent('transaction')">Transaction</button></li>
+                <li>
+                    <button onclick="toggleDropdown()">Transaction</button>
+                    <div id="transaction-dropdown" class="dropdown" style="display: none;">
+                        <button onclick="showContent('transaction-member')">Member</button><br>
+                        <button onclick="showContent('transaction-pusat')">Pusat</button>
+                    </div>
+                </li>
                 <li><button onclick="showContent('manage-sampah')">Manage Sampah</button></li>
             </ul>
         </sidebar>
@@ -33,6 +39,12 @@
         </div>
     </div>
     <script>
+        //dropdown untuk transaksi
+        function toggleDropdown() {
+            const dropdown = document.getElementById('transaction-dropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
         // Main Content Dynamic Switcher
         function showContent(type) {
             const mainContent = document.getElementById('main-content');
@@ -63,11 +75,9 @@
                     </table>
                     <button onclick="showPopup('add-member')">Add Member</button>
                 `;
-            } else if (type === 'transaction') {
+            } else if (type === 'transaction-member') {
                 mainContent.innerHTML = `
-                    <h2>Transaction</h2>
-
-                    <h3>- Transaksi Member</h3>
+                    <h2>Transaction - Member</h2>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Tanggal</th>
@@ -85,9 +95,10 @@
                         </tr>
                     </table>
                     <button onclick="showSuccessPopup('Transaksi Member berhasil direkam')">Post BS</button>
-
-                    <!-- Tabel Transaksi Bank-Sampah Pusat -->
-                    <h3>- Transaksi Bank-Sampah Pusat</h3>
+                `;
+            } else if (type === 'transaction-pusat') {
+                mainContent.innerHTML = `
+                    <h2>Transaction - Pusat</h2>
                     <table border="1" style="width: 100%; margin-bottom: 10px;">
                         <tr>
                             <th>Tanggal</th>
@@ -103,7 +114,6 @@
                             <td>5</td>
                             <td>Rp. 40,000</td>
                         </tr>
-                        <!-- Add More Rows Dynamically -->
                     </table>
                     <button onclick="showSuccessPopup('Transaksi BS Pusat berhasil direkam')">Post BS Pusat</button>
                 `;
