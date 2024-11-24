@@ -39,6 +39,7 @@
         </div>
     </div>
     <script>
+
         //dropdown untuk transaksi
         function toggleDropdown() {
             const dropdown = document.getElementById('transaction-dropdown');
@@ -78,23 +79,31 @@
             } else if (type === 'transaction-member') {
                 mainContent.innerHTML = `
                     <h2>Transaction - Member</h2>
-                    <table border="1" style="width: 100%; margin-bottom: 10px;">
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Username Member</th>
-                            <th>Nama Sampah</th>
-                            <th>Jumlah / Satuan Unit Kuantitas</th>
-                            <th>Total Harga</th>
-                        </tr>
-                        <tr>
-                            <td>22-07-2023</td>
-                            <td>John Doe</td>
-                            <td>Plastik Kresek</td>
-                            <td>5</td>
-                            <td>Rp. 40,000</td>
-                        </tr>
-                    </table>
-                    <button onclick="showSuccessPopup('Transaksi Member berhasil direkam')">Post BS</button>
+                    <input type="text" id="searchBar" placeholder="Search by Username..." oninput="handleSearch()" style="width: 100%; margin-bottom: 10px; padding: 8px; font-size: 16px;">
+                    <div id="searchSuggestions" class="dropdown" style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; display: none;"></div>
+                    <button id="tambahTransaksiBtn" onclick="showPopup('tambah-transaksi')" style="
+                        margin-top: 10px; 
+                        padding: 10px 20px; 
+                        background-color: #2196F3; 
+                        color: white; 
+                        border: none; 
+                        cursor: not-allowed; 
+                        font-size: 16px; 
+                        border-radius: 5px;" 
+                        disabled>
+                        Tambah Transaksi
+                    </button>
+                    <button onclick="showSuccessPopup('Transaksi Member berhasil direkam')" style="
+                        margin-top: 10px; 
+                        padding: 10px 20px; 
+                        background-color: #4CAF50; 
+                        color: white; 
+                        border: none; 
+                        cursor: pointer; 
+                        font-size: 16px; 
+                        border-radius: 5px;">
+                        Post BS
+                    </button>
                 `;
             } else if (type === 'transaction-pusat') {
                 mainContent.innerHTML = `
@@ -142,6 +151,43 @@
             }
         }
 
+        // Handle search
+        function handleSearch() {
+            const searchBar = document.getElementById('searchBar');
+            const searchSuggestions = document.getElementById('searchSuggestions');
+            const tambahTransaksiBtn = document.getElementById('tambahTransaksiBtn');
+            const query = searchBar.value.trim();
+
+            // Simulate fetching data (replace this with your real search logic)
+            const members = ['manuk', 'vincent', 'nathan'];
+            const filteredMembers = members.filter(member => member.toLowerCase().includes(query.toLowerCase()));
+
+            if (query === '') {
+                searchSuggestions.style.display = 'none';
+                tambahTransaksiBtn.disabled = true;
+                tambahTransaksiBtn.style.cursor = 'not-allowed';
+            } else {
+                searchSuggestions.style.display = 'block';
+                searchSuggestions.innerHTML = filteredMembers.map(member => `
+                    <div style="padding: 5px; cursor: pointer;" onclick="selectMember('${member}')">${member}</div>
+                `).join('');
+            }
+        }
+
+        // Enable the button when a member is selected
+        function selectMember(member) {
+            const searchBar = document.getElementById('searchBar');
+            const searchSuggestions = document.getElementById('searchSuggestions');
+            const tambahTransaksiBtn = document.getElementById('tambahTransaksiBtn');
+
+            searchBar.value = member;
+            searchSuggestions.style.display = 'none';
+
+            // Enable the "Tambah Transaksi" button
+            tambahTransaksiBtn.disabled = false;
+            tambahTransaksiBtn.style.cursor = 'pointer';
+        }
+
         // Dynamic Row Addition
         function addRowToTable(type, data) {
             const mainContent = document.getElementById('main-content');
@@ -173,6 +219,7 @@
                 table.appendChild(newRow);
             }
         }
+
 
         // Popup Handler Update
         function showPopup(type, data = {}) {
@@ -217,6 +264,115 @@
                     <button onclick="closePopup()">Save</button>
                     <button style="background-color: #f44336;" onclick="closePopup()">Delete</button>
                 `;
+            } else if (type === 'tambah-transaksi') {
+                popupTitle.innerText = 'Tambah Transaksi';
+                popupForm.innerHTML = `
+                    <select id="popupJenisSampah" onchange="handleJenisSampahChange()" required>
+                        <option value="" disabled selected>Pilih Jenis Sampah</option>
+                        <option value="plastik">Plastik</option>
+                        <option value="kardus">Kardus</option>
+                    </select><br>
+                    <select id="popupNamaSampah" disabled required>
+                        <option value="" disabled selected>Pilih Nama Sampah</option>
+                    </select><br>
+                    <select id="popupKuantitas" disabled required>
+                        <option value="" disabled selected>Pilih Kuantitas</option>
+                        <option value="kg">kg</option>
+                        <option value="g">g</option>
+                    </select><br>
+                    <input type="number" id="popupJumlah" placeholder="Jumlah" disabled required><br>
+                    <button id="submitPopupBtn" onclick="submitPopup('tambah-transaksi')" disabled>
+                        Tambah Transaksi
+                    </button>
+                `;
+            }
+        }
+
+        function handleJenisSampahChange() {
+            const jenisSampah = document.getElementById('popupJenisSampah').value;
+            const namaSampahDropdown = document.getElementById('popupNamaSampah');
+            const kuantitasDropdown = document.getElementById('popupKuantitas');
+            const jumlahInput = document.getElementById('popupJumlah');
+            const submitBtn = document.getElementById('submitPopupBtn');
+
+            namaSampahDropdown.disabled = true;
+            kuantitasDropdown.disabled = true;
+            jumlahInput.disabled = true;
+            submitBtn.disabled = true;
+
+            if (jenisSampah === 'plastik') {
+                namaSampahDropdown.innerHTML = `
+                    <option value="" disabled selected>Pilih Nama Sampah</option>
+                    <option value="botol plastik">Botol Plastik</option>
+                    <option value="bungkus plastik">Bungkus Plastik</option>
+                `;
+                namaSampahDropdown.disabled = false;
+            } else if (jenisSampah === 'kardus') {
+                namaSampahDropdown.innerHTML = `
+                    <option value="" disabled selected>Pilih Nama Sampah</option>
+                    <option value="kardus makanan">Kardus Makanan</option>
+                    <option value="kardus biasa">Kardus Biasa</option>
+                `;
+                namaSampahDropdown.disabled = false;
+            }
+
+            namaSampahDropdown.onchange = () => {
+                kuantitasDropdown.disabled = false;
+            };
+
+            kuantitasDropdown.onchange = () => {
+                jumlahInput.disabled = false;
+            };
+
+            jumlahInput.oninput = () => {
+                submitBtn.disabled = jumlahInput.value.trim() === '';
+            };
+        }
+
+
+        function updateNamaSampah() {
+            const jenisSampah = document.getElementById('jenisSampah').value;
+            const namaSampah = document.getElementById('namaSampah');
+
+            namaSampah.innerHTML = `<option value="" disabled selected>Pilih Nama Sampah</option>`;
+            if (jenisSampah === 'plastik') {
+                namaSampah.innerHTML += `
+                    <option value="botol_plastik">Botol Plastik</option>
+                    <option value="bungkus_plastik">Bungkus Plastik</option>
+                `;
+            } else if (jenisSampah === 'kardus') {
+                namaSampah.innerHTML += `
+                    <option value="kardus_makanan">Kardus Makanan</option>
+                    <option value="kardus_biasa">Kardus Biasa</option>
+                `;
+            }
+            namaSampah.disabled = false;
+        }
+
+        function updateKuantitas() {
+            const kuantitas = document.getElementById('kuantitas');
+            kuantitas.disabled = false;
+        }
+
+        function enableInput() {
+            const jumlah = document.getElementById('jumlah');
+            jumlah.disabled = false;
+
+            const tambahTransaksiBtn = document.getElementById('tambahTransaksiBtn');
+            tambahTransaksiBtn.disabled = false;
+        }
+
+        function addTransaction() {
+            const jenis = document.getElementById('jenisSampah').value;
+            const nama = document.getElementById('namaSampah').value;
+            const kuantitas = document.getElementById('kuantitas').value;
+            const jumlah = document.getElementById('jumlah').value;
+
+            if (jenis && nama && kuantitas && jumlah) {
+                alert(`Transaksi berhasil ditambahkan: ${jenis} - ${nama} - ${kuantitas} - ${jumlah}`);
+                closePopup();
+            } else {
+                alert('Harap isi semua kolom!');
             }
         }
 
@@ -247,7 +403,87 @@
                 } else {
                     alert('Please fill out all fields for "Add Sampah".');
                 }
+            }else if (type === 'tambah-transaksi') {
+                const jenisSampah = document.getElementById('popupJenisSampah').value;
+                const namaSampah = document.getElementById('popupNamaSampah').value;
+                const kuantitas = document.getElementById('popupKuantitas').value;
+                const jumlah = document.getElementById('popupJumlah').value;
+                const username = document.getElementById('searchBar').value.trim();
+
+                if (!jenisSampah || !namaSampah || !kuantitas || !jumlah || !username) {
+                    alert('Please ensure all fields are filled before submitting.');
+                    return;
+                }
+
+                // Prevent page refresh
+                event.preventDefault();
+
+                // Generate a new row with the entered data
+                addRowToTransactionTable({
+                    tanggal: new Date().toLocaleDateString(),
+                    username,
+                    jenisSampah,
+                    namaSampah,
+                    kuantitas,
+                    jumlah
+                });
+
+                // Close the popup
+                document.getElementById('searchBar').value = "";
+                const tambahTransaksiBtn = document.getElementById('tambahTransaksiBtn');
+                tambahTransaksiBtn.disabled = true;
+                tambahTransaksiBtn.style.cursor = 'not-allowed';
+                closePopup();
             }
+        }
+
+        function addRowToTransactionTable(data) {
+            let transactionTable = document.getElementById('transactionTable');
+            const postBSButton = document.querySelector('button[onclick="showSuccessPopup(\'Transaksi Member berhasil direkam\')"]');
+
+            // Create table if it doesn't exist
+            if (!transactionTable) {
+                const mainContent = document.getElementById('main-content');
+                const tableContainer = document.createElement('div');
+                tableContainer.innerHTML = `
+                    <table id="transactionTable" border="1" style="width: 100%; margin-top: 20px;">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Username</th>
+                                <th>Jenis Sampah</th>
+                                <th>Nama Sampah</th>
+                                <th>Kuantitas</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                `;
+                mainContent.insertBefore(tableContainer, mainContent.children[2]); // Insert below search bar
+                transactionTable = document.getElementById('transactionTable');
+            }
+
+            // Add a new row to the table
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${data.tanggal}</td>
+                <td>${data.username}</td>
+                <td>${data.jenisSampah}</td>
+                <td>${data.namaSampah}</td>
+                <td>${data.kuantitas}</td>
+                <td>${data.jumlah}</td>
+            `;
+            transactionTable.querySelector('tbody').appendChild(newRow);
+
+            // Enable the "Post BS" button
+            postBSButton.disabled = false;
+            postBSButton.style.cursor = 'pointer';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
         }
 
         function showSuccessPopup(message) {
