@@ -51,6 +51,11 @@ input[type="text"], input[type="password"] {
     width: 100%;
 }
 
+header {
+    position: sticky;
+    top: 0;
+}
+
 header, footer {
     background-color: #4CAF50;
     color: white;
@@ -87,7 +92,7 @@ header button:hover {
         "sidebar main"
         "footer footer";
     grid-template-rows: auto 1fr auto;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 250px 1fr;
     min-height: 100vh;
 }
 
@@ -105,13 +110,157 @@ sidebar {
     background-color: #f7f7f7;
     padding: 15px;
     border-right: 1px solid #ddd;
+    width: 250px;
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+/* Hilangkan bullet points pada sidebar */
+sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Lebar tombol mengikuti sidebar */
+sidebar button {
+    width: 100%;
+    padding: 12px;
+    text-align: left; /* Agar teks tidak berada di tengah */
+}
+
+/* Gaya untuk tombol sidebar */
+sidebar button {
+    background-color: #4A4A4A;  /* Warna abu gelap */
+    color: white;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* Tombol yang aktif berwarna hijau */
+sidebar button.active {
+    background-color: #4CAF50;  /* Warna hijau */
+}
+
+/* Tombol hover */
+sidebar button:hover {
+    background-color: #45a049; /* Warna hijau lebih terang saat hover */
+}
+
+/* Styling untuk tombol dropdown dalam sidebar */
+.sidebar .dropdown button {
+    background-color: #4A4A4A;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    width: 100%;
+    text-align: left;
+    margin-left: 20px;  /* Menjorok ke dalam */
+}
+
+/* Tombol dropdown hover */
+.sidebar .dropdown button:hover {
+    background-color: #45a049;
+}
+
+/* Handling dropdown display */
+#transaction-dropdown {
+    display: none; /* Awalnya dropdown disembunyikan */
+}
+
+#transaction-dropdown.show {
+    display: block; /* Menampilkan dropdown jika ada kelas .show */
+}
+
+/* CSS tambahan untuk layout */
+#main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+#searchBar {
+    width: 250px;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+button#tambahTransaksiBtn {
+    background-color: #2196F3;
+    color: white;
+    cursor: not-allowed;
+    border: none;
+}
+
+button#tambahTransaksiBtn:enabled {
+    cursor: pointer;
+}
+
+button#tambahTransaksiBtn:disabled {
+    background-color: #cccccc;
+}
+
+button:nth-child(2) {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    border: none;
 }
 
 main {
     grid-area: main;
     padding: 15px;
     background: white;
+    overflow-y: auto;
 }
+
+/* Styling untuk tabel */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Menggabungkan border */
+    margin-bottom: 20px;
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid white; /* Border tabel berwarna putih */
+}
+
+th {
+    background-color: #4CAF50; /* Background hijau untuk baris paling atas */
+    color: white; /* Teks berwarna putih */
+    font-weight: bold; /* Teks tebal */
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Warna abu-abu untuk baris genap */
+}
+
+tr:nth-child(odd) {
+    background-color: white; /* Warna putih untuk baris ganjil */
+}
+
+td {
+    color: #333; /* Warna teks di sel tabel */
+}
+
 
 .button-container {
     display: flex;

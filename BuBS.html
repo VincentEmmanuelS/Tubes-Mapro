@@ -14,15 +14,15 @@
         </header>
         <sidebar>
             <ul>
-                <li><button onclick="showContent('manage-member')">Manage Member</button></li>
+                <li><button id="manage-member-btn" onclick="showContent('manage-member')">Manage Member</button></li>
                 <li>
-                    <button onclick="toggleDropdown()">Transaction</button>
+                    <button id="transaction-btn" onclick="toggleDropdown()">Transaction</button>
                     <div id="transaction-dropdown" class="dropdown" style="display: none;">
-                        <button onclick="showContent('transaction-member')">Member</button><br>
-                        <button onclick="showContent('transaction-pusat')">Pusat</button>
+                        <button id="transaction-member-btn" onclick="showContent('transaction-member')">Member</button><br>
+                        <button id="transaction-pusat-btn" onclick="showContent('transaction-pusat')">Pusat</button>
                     </div>
                 </li>
-                <li><button onclick="showContent('manage-sampah')">Manage Sampah</button></li>
+                <li><button id="manage-sampah-btn" onclick="showContent('manage-sampah')">Manage Sampah</button></li>
             </ul>
         </sidebar>
         <main id="main-content">
@@ -70,7 +70,7 @@
                             <td>johndoe@example.com</td>
                             <td>081234567890</td>
                             <td>Jl. Bintang Kejora</td>
-                            <th>Binong</th>
+                            <td>Binong</td>
                         </tr>
                         <!-- Add More Rows Dynamically -->
                     </table>
@@ -79,7 +79,7 @@
             } else if (type === 'transaction-member') {
                 mainContent.innerHTML = `
                     <h2>Transaction - Member</h2>
-                    <input type="text" id="searchBar" placeholder="Search by Username..." oninput="handleSearch()" style="width: 100%; margin-bottom: 10px; padding: 8px; font-size: 16px;">
+                    <input type="text" id="searchBar" placeholder="Search by Username..." oninput="handleSearch()" style="width: 250px; margin-bottom: 10px; padding: 8px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc;">
                     <div id="searchSuggestions" class="dropdown" style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; display: none;"></div>
                     <button id="tambahTransaksiBtn" onclick="showPopup('tambah-transaksi')" style="
                         margin-top: 10px; 
