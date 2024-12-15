@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Harga</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bank Sampah - Daftar Harga</h1>
+            <a href="{{ url_for('dashboardMemberView') }}"><button>Kembali</button></a>
+        </header>
+        <sidebar>
+            <ul>
+                <li>
+                    <a href="{{ url_for('lihatHarga') }}">
+                        <button class="nav-button {% if request.endpoint == 'lihatHarga' %}active{% endif %}">
+                            Lihat Harga Sekarang
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('lihatHistory') }}">
+                        <button class="nav-button {% if request.endpoint == 'lihatHistory' %}active{% endif %}">
+                            Lihat History
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('laporanPendapatan') }}">
+                        <button class="nav-button {% if request.endpoint == 'laporanPendapatan' %}active{% endif %}">
+                            Laporan Pendapatan
+                        </button>
+                    </a>
+                </li>
+            </ul>
+        </sidebar>
+        <main>
+            <h2>Daftar Harga</h2>
+            <table border="1" style="width: 100%; margin-bottom: 10px;">
+                <tr>
+                    <th>Nama Sampah</th>
+                    <th>Harga / Satuan Unit Kuantitas</th>
+                    <th>Jenis Sampah</th>
+                    <th>Satuan Unit Kuantitas</th>
+                </tr>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>Rp. {{ row[1] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </main>
+        <footer>Bank Sampah</footer>
+    </div>
+</body>
+</html>
