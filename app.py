@@ -6,7 +6,7 @@ app.secret_key = "secret_key_12345"
 
 DB_CONFIG = {
     'host': 'localhost',
-    'database': 'Manpro',
+    'database': 'TA_Manpro',
     'user': 'postgres',
     'password': 'postgres',
 }
@@ -76,6 +76,140 @@ def dashboardAdminView():
 def logoutAdmin():
     session.clear()
     return redirect(url_for("adminView"))
+
+@app.route("/admin/manageMember")
+def manageMember():
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # Query to fetch data for the table
+        query = """
+                    SELECT 
+                        p.nama, 
+                        p.username, 
+                        m.email, 
+                        m.noHP, 
+                        m.alamat, 
+                        k.namaKel
+                    FROM 
+                        Pengguna p
+                    INNER JOIN 
+                        Member m ON p.idPengguna = m.idPengguna
+                    INNER JOIN 
+                        Kelurahan k ON m.idKel = k.idKel;
+                """
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        # Render the table with the query results
+        return render_template('ManageMember.html', data=results)
+
+    except Exception as e:
+        print(f"Database error: {e}")
+        return "Error fetching data from the database."
+    
+@app.route("/admin/manageSampah")
+def manageSampah():
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # Query to fetch data for the table
+        query = """
+                    select distinct on (sampah.namasampah) 
+                        sampah.namasampah, 
+                        harga.hargasampah, 
+                        jenissampah.namajenis, 
+                        suk.namasuk
+                    from 
+                        sampah
+                        inner join harga on sampah.idsampah = harga.idsampah
+                        inner join jenissampah on sampah.idjenissampah = jenissampah.idjenissampah
+                        inner join suk on sampah.idsuk = suk.idsuk
+                    order by sampah.namasampah, harga.tanggalubah desc;
+                """
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        # Render the table with the query results
+        return render_template('ManageSampah.html', data=results)
+
+    except Exception as e:
+        print(f"Database error: {e}")
+        return "Error fetching data from the database."
+    
+@app.route("/admin/transaksiMasuk")
+def transaksiMasuk():
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # Query to fetch data for the table
+        query = """
+                    SELECT
+                        tanggal, nama, namaSampah, hargaTotal
+                    FROM
+                        Transaksi INNER JOIN TransaksiSampah
+                        ON Transaksi.idTransaksi = TransaksiSampah.idTransaksi
+                        INNER JOIN Member
+                        ON Transaksi.idPengguna = Member.idPengguna
+                        INNER JOIN Pengguna
+                        ON Pengguna.idPengguna = Member.idPengguna
+                        INNER JOIN Sampah
+                        ON TransaksiSampah.idSampah = Sampah.idSampah
+                """
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        # Render the table with the query results
+        return render_template('TransaksiMasuk.html', data=results)
+
+    except Exception as e:
+        print(f"Database error: {e}")
+        return "Error fetching data from the database."
+
+@app.route("/admin/transaksiKeluar")
+def transaksiKeluar():
+    try:
+        conn = psycopg2.connect(**DB_CONFIG)
+        cursor = conn.cursor()
+
+        # Query to fetch data for the table
+        query = """
+                    SELECT
+                        tanggal, namaKel, namaSampah, hargaTotal
+                    FROM
+                        Transaksi INNER JOIN TransaksiSampah
+                        ON Transaksi.idTransaksi = TransaksiSampah.idTransaksi
+                        INNER JOIN Sampah
+                        ON TransaksiSampah.idSampah = Sampah.idSampah
+                        INNER JOIN BSPusat
+                        ON Transaksi.idBSPusat = BSPusat.idBSPusat
+                        INNER JOIN Kelurahan
+                        ON BSPusat.idKel = Kelurahan.idKel;
+                """
+        cursor.execute(query)
+        results = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        # Render the table with the query results
+        return render_template('TransaksiKeluar.html', data=results)
+
+    except Exception as e:
+        print(f"Database error: {e}")
+        return "Error fetching data from the database."
 
 
 
