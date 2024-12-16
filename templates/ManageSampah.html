@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sampah - Manage Member</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bank Sampah</h1>
+            <a href="{{ url_for('dashboardMemberView') }}"><button>Kembali</button></a>
+        </header>
+        <sidebar>
+            <ul>
+                <li>
+                    <a href="{{ url_for('manageMember') }}">
+                        <button class="nav-button {% if request.endpoint == 'manageMember' %}active{% endif %}">
+                            Manage Member
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <button class="nav-button {% if request.endpoint == 'transaksiMasuk' %}active{% endif %}" onclick="toggleDropdown()">Transaction</button>
+                    <div id="transaction-dropdown" class="dropdown" style="display: none;">
+                        <a href="{{ url_for('transaksiMasuk') }}">
+                            <button class="nav-button {% if request.endpoint == 'transaksiMasuk' %}active{% endif %}">
+                                Transaksi Masuk
+                            </button>
+                        </a><br>
+                        <a href="{{ url_for('transaksiKeluar') }}">
+                            <button class="nav-button {% if request.endpoint == 'transaksiKeluar' %}active{% endif %}">
+                                Transaksi Keluar
+                            </button>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <a href="{{ url_for('manageSampah') }}">
+                        <button class="nav-button {% if request.endpoint == 'manageSampah' %}active{% endif %}">
+                            Manage Sampah
+                        </button>
+                    </a>
+                </li>
+            </ul>
+        </sidebar>
+        <main id="main-content">
+            <h2>Manage Sampah</h2>
+            <table border="1" style="width: 100%; margin-bottom: 10px;">
+                <tr>
+                    <th>Nama Sampah</th>
+                    <th>Harga / Satuan Unit Kuantitas</th>
+                    <th>Jenis Sampah</th>
+                    <th>Satuan Unit Kuantitas</th>
+                </tr>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>Rp. {{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </main>
+        <footer>Bank Sampah</footer>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('transaction-dropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        }
+
+    </script>
+</body>
+</html>
