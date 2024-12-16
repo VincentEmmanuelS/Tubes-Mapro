@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sampah - Member</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bank Sampah</h1>
+            <a href="{{ url_for('logoutMember') }}"><button>Log Out</button></a>
+        </header>
+        <sidebar>
+            <ul>
+                <li>
+                    <a href="{{ url_for('lihatHarga') }}">
+                        <button class="nav-button {% if request.endpoint == 'lihatHarga' %}active{% endif %}">
+                            Lihat Harga Sekarang
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('lihatHistory') }}">
+                        <button class="nav-button {% if request.endpoint == 'lihatHistory' %}active{% endif %}">
+                            Lihat History
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('laporanPendapatan') }}">
+                        <button class="nav-button {% if request.endpoint == 'laporanPendapatan' %}active{% endif %}">
+                            Laporan Pendapatan
+                        </button>
+                    </a>
+                </li>
+            </ul>
+        </sidebar>
+        <main id="main-content">
+            <h2>Selamat Datang di Halaman Member</h2>
+        </main>
+        <footer>Bank Sampah</footer>
+    </div>
+    <script>
+        function showContent(type) {
+            const mainContent = document.getElementById('main-content');
+            if (type === 'laporan') {
+                mainContent.innerHTML = `
+                    <!-- Tabel Transaksi Member -->
+                    <h2>Laporan Pendapatan</h2>
+                    <form>
+                        <label for="startingDate">tanggal awal:</label>
+                        <input type="date" name="startingDate"><br>
+                        <label for="endingDate">tanggal akhir:</label>
+                        <input type="date" name="endingDate"><br>
+                        <input type="submit">
+                    </form>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

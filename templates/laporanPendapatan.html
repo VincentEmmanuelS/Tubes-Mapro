@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Sampah - Member</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bank Sampah</h1>
+            <a href="{{ url_for('dashboardMemberView') }}"><button>Kembali</button></a>
+        </header>
+        <sidebar>
+            <ul>
+                <li>
+                    <a href="{{ url_for('lihatHarga') }}">
+                        <button class="nav-button {% if request.endpoint == 'lihatHarga' %}active{% endif %}">
+                            Lihat Harga Sekarang
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('lihatHistory') }}">
+                        <button class="nav-button {% if request.endpoint == 'lihatHistory' %}active{% endif %}">
+                            Lihat History
+                        </button>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('laporanPendapatan') }}">
+                        <button class="nav-button {% if request.endpoint == 'laporanPendapatan' %}active{% endif %}">
+                            Laporan Pendapatan
+                        </button>
+                    </a>
+                </li>
+            </ul>
+        </sidebar>
+        <main id="main-content">
+            <h2>Laporan Pendapatan</h2>
+            <form method="POST" action="{{ url_for('laporanPendapatan') }}">
+                <label for="startingDate">Tanggal Awal:</label>
+                <input type="date" name="startingDate" required><br>
+                <label for="endingDate">Tanggal Akhir:</label>
+                <input type="date" name="endingDate" required><br>
+                <input type="submit" value="Submit">
+            </form>
+            {% if transactions %}
+            <h2>Hasil Laporan</h2>
+            <table border="1" style="width: 100%; margin-bottom: 10px;">
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Nama Sampah</th>
+                    <th>Jumlah / Satuan Unit Kuantitas</th>
+                    <th>Satuan Unit Kuantitas</th>
+                    <th>Total Harga</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction[0] }}</td>
+                    <td>{{ transaction[1] }}</td>
+                    <td>{{ transaction[2] }}</td>
+                    <td>{{ transaction[3] }}</td>
+                    <td>Rp. {{ transaction[4] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <h3>Total Pendapatan: Rp. {{ total_pendapatan }}</h3>
+            {% elif message %}
+            <p>{{ message }}</p>
+            {% endif %}
+        </main>
+        <footer>Bank Sampah</footer>
+    </div>
+</body>
+</html>
